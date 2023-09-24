@@ -1,9 +1,9 @@
 const ThreadsTableTestHelper = require('../../../../tests/ThreadsTableTestHelper');
 const UsersTableTestHelper = require('../../../../tests/UsersTableTestHelper');
 
-const NewThread = require('../../../Domains/threads/entities/NewThread');
-const NewAddedThread = require('../../../Domains/threads/entities/NewAddedThread');
 const pool = require('../../database/postgres/pool');
+const AddThread = require('../../../Domains/threads/entities/AddThread');
+const AddedThread = require('../../../Domains/threads/entities/AddedThread');
 const ThreadRepositoryPostgres = require('../ThreadRepositoryPostgres');
 
 describe('ThreadRepositoryPostgres', () => {
@@ -21,7 +21,7 @@ describe('ThreadRepositoryPostgres', () => {
 
   describe('addThread function', () => {
     it('should persist add thread and return added thread correctly', async () => {
-      const newThread = new NewThread({
+      const newThread = new AddThread({
         title: 'judul',
         body: 'isi body',
         owner: 'user-123',
@@ -36,7 +36,7 @@ describe('ThreadRepositoryPostgres', () => {
     });
 
     it('should return added thread correctly', async () => {
-      const newThread = new NewThread({
+      const newThread = new AddThread({
         title: 'judul',
         body: 'isi body',
         owner: 'user-123',
@@ -47,7 +47,7 @@ describe('ThreadRepositoryPostgres', () => {
       const newAddedThread = await threadRepositoryPostgres.addThread(newThread);
 
       expect(newAddedThread).toStrictEqual(
-        new NewAddedThread({
+        new AddedThread({
           id: 'thread-123',
           title: 'judul',
           owner: 'user-123',
