@@ -1,4 +1,4 @@
-class NewAddedThread {
+class AddedThread {
   constructor(payload) {
     this._verifyPayload(payload);
 
@@ -11,13 +11,13 @@ class NewAddedThread {
 
   _verifyPayload({ id, title, owner }) {
     if (!id || !title || !owner) {
-      throw new Error('NEW_ADDED_THREAD.NOT_CONTAIN_NEEDED_PROPERTY');
+      throw new Error('ADDED_THREAD.NOT_CONTAIN_NEEDED_PROPERTY');
     }
 
     if (typeof id !== 'string' || typeof title !== 'string' || typeof owner !== 'string') {
-      throw new Error('NEW_ADDED_THREAD.NOT_MEET_DATA_TYPE_SPECIFICATION');
+      throw new Error('ADDED_THREAD.NOT_MEET_DATA_TYPE_SPECIFICATION');
     }
   }
 }
 
-module.exports = NewAddedThread;
+module.exports = AddedThread;

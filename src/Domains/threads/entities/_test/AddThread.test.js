@@ -1,12 +1,13 @@
-const NewThread = require('../NewThread');
+const AddThread = require('../AddThread');
 
-describe('a NewThread entities', () => {
+describe('a addThread entities', () => {
   it('should throw error when payload did not contain needed property', () => {
     const payload = {
-      title: 'abc',
+      title: 'judul',
+      body: 'isi body',
     };
 
-    expect(() => new NewThread(payload)).toThrowError('NEW_THREAD.NOT_CONTAIN_NEEDED_PROPERTY');
+    expect(() => new AddThread(payload)).toThrowError('ADD_THREAD.NOT_CONTAIN_NEEDED_PROPERTY');
   });
 
   it('should throw error when payload did not meet data type specification', () => {
@@ -16,7 +17,7 @@ describe('a NewThread entities', () => {
       owner: 'abc',
     };
 
-    expect(() => new NewThread(payload)).toThrowError('NEW_THREAD.NOT_MEET_DATA_TYPE_SPECIFICATION');
+    expect(() => new AddThread(payload)).toThrowError('ADD_THREAD.NOT_MEET_DATA_TYPE_SPECIFICATION');
   });
 
   it('should throw error when title contain more than 50 character', () => {
@@ -26,17 +27,17 @@ describe('a NewThread entities', () => {
       owner: 'abc',
     };
 
-    expect(() => new NewThread(payload)).toThrowError('NEW_THREAD.TITLE_LIMIT_CHAR');
+    expect(() => new AddThread(payload)).toThrowError('ADD_THREAD.TITLE_LIMIT_CHAR');
   });
 
   it('should create newThread object correctly', () => {
     const payload = {
-      title: 'Backend Developer',
-      body: 'Menjadi Back-end Developer Expert',
-      owner: 'zulva',
+      title: 'judul',
+      body: 'isi body',
+      owner: 'user-123',
     };
 
-    const { title, body, owner } = new NewThread(payload);
+    const { title, body, owner } = new AddThread(payload);
 
     expect(title).toEqual(payload.title);
     expect(body).toEqual(payload.body);
