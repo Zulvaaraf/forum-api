@@ -21,6 +21,8 @@ class ThreadsHandler {
     response.code(201);
     return response;
   }
+
+  // ERROR! KETIKA SAYA MAU MENAMBAHKAN HANDLER UNTUK GET THREAD ( SERVER.INJECT IS NOT A FUNCTION )
 }
 
 module.exports = ThreadsHandler;
