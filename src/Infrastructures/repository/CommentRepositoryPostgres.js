@@ -1,6 +1,7 @@
 const AddedComment = require('../../Domains/comments/entities/AddedComment');
 const CommentRepository = require('../../Domains/comments/CommentRepository');
-// const NotFoundError = require('../../Commons/exceptions/NotFoundError');
+const AuthorizationError = require('../../Commons/exceptions/AuthorizationError');
+const NotFoundError = require('../../Commons/exceptions/NotFoundError');
 
 class CommentRepositoryPostgres extends CommentRepository {
   constructor(pool, idGenerator) {
@@ -25,22 +26,46 @@ class CommentRepositoryPostgres extends CommentRepository {
     return new AddedComment({ ...result.rows[0] });
   }
 
-  // async getCommentByThreadId(threadId) {
-  //   const query = {
-  //     text: 'SELECT id, owner, content, date, is_delete FROM comments WHERE thread_id = $1',
-  //     values: [threadId],
-  //   };
+  async verifyCommentAccess(commentId, owner) {
+    const query = {
+      text: 'SELECT 1 FROM comments WHERE id = $1 AND owner = $2',
+      values: [commentId, owner],
+    };
 
-  //   const result = await this._pool.query(query);
+    const result = await this._pool.query(query);
 
-  //   if (!result.rowCount) {
-  //     throw new NotFoundError('Komentar tidak ada');
-  //   }
+    if (!result.rows.length) {
+      throw new AuthorizationError('You are not authorized to access');
+    }
+  }
 
-  //   return result.rows.map((comment) => ({
-  //     ...comment,
-  //   }));
-  // }
+  async getCommentByThreadId(commentId) {
+    const query = {
+      text: 'SELECT * FROM comments WHERE id = $1',
+      values: [commentId],
+    };
+
+    const result = await this._pool.query(query);
+
+    if (!result.rowCount) {
+      throw new NotFoundError('Comments not found');
+    }
+
+    return commentId;
+  }
+
+  async deleteComment(commentId) {
+    const query = {
+      text: 'UPDATE comments SET is_delete = true WHERE id = $1',
+      values: [commentId],
+    };
+
+    const result = await this._pool.query(query);
+
+    if (!result.rowCount) {
+      throw new NotFoundError('Comment not found!');
+    }
+  }
 }
 
 module.exports = CommentRepositoryPostgres;

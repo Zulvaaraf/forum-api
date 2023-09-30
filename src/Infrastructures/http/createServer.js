@@ -7,12 +7,15 @@ const DomainErrorTranslator = require('../../Commons/exceptions/DomainErrorTrans
 const users = require('../../Interfaces/http/api/users');
 const authentications = require('../../Interfaces/http/api/authentications');
 const threads = require('../../Interfaces/http/api/threads');
+const comments = require('../../Interfaces/http/api/comments');
 
 const createServer = async (container) => {
   const server = Hapi.server({
     host: process.env.HOST,
     port: process.env.PORT,
   });
+
+  console.log(container);
 
   await server.register([
     {
@@ -49,6 +52,10 @@ const createServer = async (container) => {
       plugin: threads,
       options: { container },
     },
+    {
+      plugin: comments,
+      options: { container },
+    },
   ]);
 
   server.ext('onPreResponse', (request, h) => {
@@ -79,6 +86,7 @@ const createServer = async (container) => {
         status: 'error',
         message: 'terjadi kegagalan pada server kami',
       });
+      console.log(response.message);
       newResponse.code(500);
       return newResponse;
     }
