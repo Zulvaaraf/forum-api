@@ -11,6 +11,9 @@ describe('DomainErrorTranslator', () => {
     expect(DomainErrorTranslator.translate(new Error('ADD_THREAD.NOT_CONTAIN_NEEDED_PROPERTY'))).toStrictEqual(new InvariantError('tidak dapat menambahkan thread baru karena property yang dibutuhkan tidak ada'));
     expect(DomainErrorTranslator.translate(new Error('ADD_THREAD.NOT_MEET_DATA_TYPE_SPECIFICATION'))).toStrictEqual(new InvariantError('tidak dapat menambahkan thread baru karena tipe data tidak sesuai'));
     expect(DomainErrorTranslator.translate(new Error('ADD_THREAD.TITLE_LIMIT_CHAR'))).toStrictEqual(new InvariantError('tidak dapat menambahkan thread baru karena karakter title melebihi batas maksimal'));
+
+    expect(DomainErrorTranslator.translate(new Error('ADD_COMMENT.NOT_CONTAIN_NEEDED_PROPERTY'))).toStrictEqual(new InvariantError('tidak dapat menambahkan comment baru karena property yang dibutuhkan tidak ada'));
+    expect(DomainErrorTranslator.translate(new Error('ADD_COMMENT.NOT_MEET_DATA_TYPE_SPECIFICATION'))).toStrictEqual(new InvariantError('tidak dapat menambahkan comment baru karena tipe data tidak sesuai'));
   });
 
   it('should return original error when error message is not needed to translate', () => {
