@@ -22,9 +22,8 @@ DomainErrorTranslator._directories = {
   'ADD_THREAD.NOT_MEET_DATA_TYPE_SPECIFICATION': new InvariantError('tidak dapat menambahkan thread baru karena tipe data tidak sesuai'),
   'ADD_THREAD.TITLE_LIMIT_CHAR': new InvariantError('tidak dapat menambahkan thread baru karena karakter title melebihi batas maksimal'),
 
-  // 'NEW_THREAD.NOT_CONTAIN_NEEDED.PROPERTY': new InvariantError('tidak dapat menambahkan thread baru karena properti yang dibutuhkan tidak ada'),
-  // 'NEW_THREAD.NOT_MEET_DATA_TYPE_SPECIFICATION': new InvariantError('tidak dapat menambahkan thread baru karena tipe data tidak sesuai'),
-  // 'NEW_THREAD.TITLE_LIMIT_CHAR': new InvariantError('tidak dapat menambahkan thread baru karena karakter title melebihi batas maksimal'),
+  'ADD_COMMENT.NOT_CONTAIN_NEEDED_PROPERTY': new InvariantError('tidak dapat menambahkan comment baru karena property yang dibutuhkan tidak ada'),
+  'ADD_COMMENT.NOT_MEET_DATA_TYPE_SPECIFICATION': new InvariantError('tidak dapat menambahkan comment baru karena tipe data tidak sesuai'),
 };
 
 module.exports = DomainErrorTranslator;

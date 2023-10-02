@@ -1,6 +1,6 @@
 const AddThread = require('../../Domains/threads/entities/AddThread');
 
-class ThreadUseCase {
+class AddThreadUseCase {
   constructor({ threadRepository }) {
     this._threadRepository = threadRepository;
   }
@@ -11,4 +11,4 @@ class ThreadUseCase {
   }
 }
 
-module.exports = ThreadUseCase;
+module.exports = AddThreadUseCase;
