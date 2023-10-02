@@ -15,8 +15,6 @@ const createServer = async (container) => {
     port: process.env.PORT,
   });
 
-  console.log(container);
-
   await server.register([
     {
       plugin: Jwt,
@@ -86,7 +84,6 @@ const createServer = async (container) => {
         status: 'error',
         message: 'terjadi kegagalan pada server kami',
       });
-      console.log(response.message);
       newResponse.code(500);
       return newResponse;
     }
