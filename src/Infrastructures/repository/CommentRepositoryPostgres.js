@@ -1,4 +1,5 @@
 const AddedComment = require('../../Domains/comments/entities/AddedComment');
+const GetComment = require('../../Domains/comments/entities/GetComment');
 const CommentRepository = require('../../Domains/comments/CommentRepository');
 const AuthorizationError = require('../../Commons/exceptions/AuthorizationError');
 const NotFoundError = require('../../Commons/exceptions/NotFoundError');
@@ -39,7 +40,7 @@ class CommentRepositoryPostgres extends CommentRepository {
     }
   }
 
-  async getCommentByThreadId(commentId) {
+  async getCommentById(commentId) {
     const query = {
       text: 'SELECT * FROM comments WHERE id = $1',
       values: [commentId],
@@ -52,6 +53,31 @@ class CommentRepositoryPostgres extends CommentRepository {
     }
 
     return commentId;
+  }
+
+  async getComment(threadId) {
+    const query = {
+      text: `SELECT comments.id, users.username, comments.date, comments.content, comments.is_delete FROM comments
+      LEFT JOIN users ON comments.owner = users.id WHERE comments.thread_id = $1`,
+      values: [threadId],
+    };
+
+    const result = await this._pool.query(query);
+
+    if (!result.rowCount) {
+      throw new NotFoundError('Comments not found');
+    }
+
+    return result.rows.map(
+      (payload) =>
+        new GetComment({
+          id: payload.id,
+          username: payload.username,
+          date: payload.date,
+          content: payload.content,
+          isDelete: payload.is_delete,
+        })
+    );
   }
 
   async deleteComment(commentId) {
