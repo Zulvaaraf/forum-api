@@ -1,8 +1,8 @@
-const GetDetailThreadUseCase = require('../../use_case/GetDetailThreadUseCase');
 const ThreadRepository = require('../../../Domains/threads/ThreadRepository');
 const CommentRepository = require('../../../Domains/comments/CommentRepository');
 const GetThread = require('../../../Domains/threads/entities/GetThread');
 const GetComment = require('../../../Domains/comments/entities/GetComment');
+const GetDetailThreadUseCase = require('../../use_case/GetDetailThreadUseCase');
 
 describe('GetDetailThreadUseCase', () => {
   it('should orchestrating the get detail thread action correctly', async () => {
@@ -20,9 +20,9 @@ describe('GetDetailThreadUseCase', () => {
       }),
       new GetComment({
         id: 'comment-321',
-        username: 'johndoe',
+        username: 'zulva',
         date: '2023-09-25T11:52:48.150Z',
-        content: 'isi comment',
+        content: 'isi new comment',
         isDelete: true,
       }),
     ];

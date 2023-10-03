@@ -123,7 +123,7 @@ describe('/threads endpoint', () => {
       const responseJson = JSON.parse((await response).payload);
       expect((await response).statusCode).toEqual(404);
       expect(responseJson.status).toEqual('fail');
-      expect(responseJson.message).toEqual('Thread not found');
+      expect(responseJson.message).toEqual('Thread not found!');
     });
 
     it('should response 200 when get comment thread detail correctly', async () => {
