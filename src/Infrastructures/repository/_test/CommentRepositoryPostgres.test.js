@@ -133,10 +133,10 @@ describe('CommentRepositoryPostgres', () => {
 
     it('should return get comment correctly', async () => {
       await UsersTableTestHelper.addUser({
-        id: 'user-456',
-        username: 'johndoe',
+        id: 'user-321',
+        username: 'zulva',
         password: 'secret',
-        fullname: 'John Doe',
+        fullname: 'Zulva Araf',
       });
       await CommentTableTestHelper.addComment({
         id: 'comment-123',
@@ -147,9 +147,9 @@ describe('CommentRepositoryPostgres', () => {
         isDelete: false,
       });
       await CommentTableTestHelper.addComment({
-        id: 'comment-456',
-        username: 'johndoe',
-        owner: 'user-456',
+        id: 'comment-321',
+        username: 'zulva',
+        owner: 'user-321',
         date: '2023-09-25T11:52:48.150Z',
         content: 'isi new comment',
         isDelete: true,
@@ -170,8 +170,8 @@ describe('CommentRepositoryPostgres', () => {
       );
       expect(comment[1]).toStrictEqual(
         new GetComment({
-          id: 'comment-456',
-          username: 'johndoe',
+          id: 'comment-321',
+          username: 'zulva',
           date: '2023-09-25T11:52:48.150Z',
           content: '**komentar telah dihapus**',
           isDelete: true,

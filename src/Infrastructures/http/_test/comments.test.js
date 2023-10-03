@@ -37,7 +37,7 @@ describe('/comments endpoint', () => {
       const responseJson = JSON.parse(response.payload);
       expect(response.statusCode).toEqual(404);
       expect(responseJson.status).toEqual('fail');
-      expect(responseJson.message).toEqual('Thread not found');
+      expect(responseJson.message).toEqual('Thread not found!');
     });
 
     it('should response 401 when you are not autorized', async () => {
@@ -203,7 +203,7 @@ describe('/comments endpoint', () => {
       const responseJson = JSON.parse(response.payload);
       expect(response.statusCode).toEqual(404);
       expect(responseJson.status).toEqual('fail');
-      expect(responseJson.message).toEqual('Comments not found');
+      expect(responseJson.message).toEqual('Comments not found!');
     });
 
     it('should response 403 when deleting non-belonging comments ', async () => {

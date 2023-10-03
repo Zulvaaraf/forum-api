@@ -49,7 +49,7 @@ class CommentRepositoryPostgres extends CommentRepository {
     const result = await this._pool.query(query);
 
     if (!result.rowCount) {
-      throw new NotFoundError('Comments not found');
+      throw new NotFoundError('Comments not found!');
     }
 
     return commentId;
@@ -65,7 +65,7 @@ class CommentRepositoryPostgres extends CommentRepository {
     const result = await this._pool.query(query);
 
     if (!result.rowCount) {
-      throw new NotFoundError('Comments not found');
+      throw new NotFoundError('Comments not found!');
     }
 
     return result.rows.map(
