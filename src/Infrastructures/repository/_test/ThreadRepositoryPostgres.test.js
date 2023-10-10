@@ -46,9 +46,8 @@ describe('ThreadRepositoryPostgres', () => {
       const fakeIdGenerator = () => '123';
       const threadRepositoryPostgres = new ThreadRepositoryPostgres(pool, fakeIdGenerator);
 
-      const newAddedThread = await threadRepositoryPostgres.addThread(newThread);
-
-      expect(newAddedThread).toStrictEqual(
+      const addedThread = await threadRepositoryPostgres.addThread(newThread);
+      expect(addedThread).toStrictEqual(
         new AddedThread({
           id: 'thread-123',
           title: 'judul',
@@ -59,71 +58,49 @@ describe('ThreadRepositoryPostgres', () => {
   });
 
   describe('getThreadById function', () => {
-    it('should throw NotFoundError when thread not found', async () => {
-      await ThreadsTableTestHelper.addThread({
-        id: 'thread-123',
-        title: 'judul',
-        body: 'isi body',
-        owner: 'user-123',
-        date: '2023-09-25T11:52:48.150Z',
-      });
-
-      const threadRepositoryPostgres = new ThreadRepositoryPostgres(pool, {});
+    it('should throw NotFoundError when thread id not found', async () => {
+      const threadRepositoryPostgres = new ThreadRepositoryPostgres(pool);
 
       await expect(threadRepositoryPostgres.getThreadById('thread-321')).rejects.toThrowError(NotFoundError);
     });
 
-    it('should return not throw error when thread found', async () => {
-      await ThreadsTableTestHelper.addThread({
-        id: 'thread-123',
-        title: 'judul',
-        body: 'isi body',
-        owner: 'user-123',
-        date: '2023-09-25T11:52:48.150Z',
-      });
+    it('should return thread by id correctly', async () => {
+      await ThreadsTableTestHelper.addThread({ id: 'thread-123', owner: 'user-123' });
 
-      const threadRepositoryPostgres = new ThreadRepositoryPostgres(pool, {});
+      const fakeIdGenerator = () => '123';
+      const threadRepositoryPostgres = new ThreadRepositoryPostgres(pool, fakeIdGenerator);
 
-      const threadId = await threadRepositoryPostgres.getThreadById('thread-123');
-      expect(threadId).toEqual('thread-123');
+      await expect(threadRepositoryPostgres.getThreadById('thread-123')).resolves.not.toThrowError(NotFoundError);
     });
   });
 
   describe('getDetailThread function', () => {
     it('should throw NotFoundError when thread not found', async () => {
-      await ThreadsTableTestHelper.addThread({
-        id: 'thread-123',
-        title: 'judul',
-        body: 'isi body',
-        owner: 'user-123',
-        date: '2023-09-25T11:52:48.150Z',
-      });
-
-      const threadRepositoryPostgres = new ThreadRepositoryPostgres(pool, {});
+      const threadRepositoryPostgres = new ThreadRepositoryPostgres(pool);
 
       await expect(threadRepositoryPostgres.getDetailThread('thread-111')).rejects.toThrowError(NotFoundError);
     });
 
-    it('should return not throw error when thread found', async () => {
-      await ThreadsTableTestHelper.addThread({
+    it('should return detail thread correctly', async () => {
+      const expectedThread = {
         id: 'thread-123',
-        title: 'judul',
-        body: 'isi body',
-        owner: 'user-123',
-        date: '2023-09-25T11:52:48.150Z',
-      });
-
-      const threadRepositoryPostgres = new ThreadRepositoryPostgres(pool, {});
-
-      const threadId = await threadRepositoryPostgres.getDetailThread('thread-123');
-
-      expect(threadId).toStrictEqual({
-        id: 'thread-123',
-        title: 'judul',
-        body: 'isi body',
+        title: 'title thread',
+        body: 'body thread',
         date: '2023-09-25T11:52:48.150Z',
         username: 'dicoding',
-      });
+      };
+
+      await ThreadsTableTestHelper.addThread({ id: 'thread-123', owner: 'user-123' });
+      const threadRepositoryPostgres = new ThreadRepositoryPostgres(pool, {});
+
+      const getDetailThread = await threadRepositoryPostgres.getDetailThread('thread-123');
+
+      expect(getDetailThread).toStrictEqual(expectedThread);
+      expect(getDetailThread).toHaveProperty('id', 'thread-123');
+      expect(getDetailThread).toHaveProperty('title', 'title thread');
+      expect(getDetailThread).toHaveProperty('body', 'body thread');
+      expect(getDetailThread).toHaveProperty('date', '2023-09-25T11:52:48.150Z');
+      expect(getDetailThread).toHaveProperty('username', 'dicoding');
     });
   });
 });
