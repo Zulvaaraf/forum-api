@@ -182,13 +182,8 @@ describe('/comments endpoint', () => {
       };
 
       const accessToken = await ServerTestHelper.getAccessToken();
-      await ThreadsTableTestHelper.addThread({
-        id: 'thread-123',
-        title: 'judul',
-        body: 'isi body',
-        owner: 'user-123',
-        date: '2023-09-25T11:52:48.150Z',
-      });
+
+      await ThreadsTableTestHelper.addThread({ id: 'thread-123', owner: 'user-123' });
       const server = await createServer(container);
 
       const response = await server.inject({
@@ -214,29 +209,13 @@ describe('/comments endpoint', () => {
       const server = await createServer(container);
       const accessToken = await ServerTestHelper.getAccessToken();
 
-      await UsersTableTestHelper.addUser({
-        id: 'user-456',
-        username: 'johndoe',
-        password: 'inipasswordy',
-        fullname: 'John Doe',
-      });
-      await ThreadsTableTestHelper.addThread({
-        id: 'thread-456',
-        title: 'isi title',
-        body: 'isi body',
-        owner: 'user-456',
-        date: '2023-09-25T11:52:48.150Z',
-      });
-      await CommentTableTestHelper.addComment({
-        id: 'comment-456',
-        threadId: 'thread-456',
-        content: 'isi content',
-        owner: 'user-456',
-      });
+      await UsersTableTestHelper.addUser({ id: 'user-321', username: 'zulva' });
+      await ThreadsTableTestHelper.addThread({ id: 'thread-321', title: 'isi title', body: 'isi body', owner: 'user-321', date: '2023-09-25T11:52:48.150Z' });
+      await CommentTableTestHelper.addComment({ id: 'comment-321', threadId: 'thread-321', content: 'isi content', owner: 'user-321' });
 
       const response = await server.inject({
         method: 'DELETE',
-        url: '/threads/thread-456/comments/comment-456',
+        url: '/threads/thread-321/comments/comment-321',
         payload: requestPayload,
         headers: {
           Authorization: `Bearer ${accessToken}`,
@@ -254,26 +233,10 @@ describe('/comments endpoint', () => {
         content: 'isi comment',
       };
 
-      await UsersTableTestHelper.addUser({
-        id: 'user-123',
-        username: 'dicoding',
-        password: 'secret',
-        fullname: 'Dicoding Indonesia',
-      });
-      await ThreadsTableTestHelper.addThread({
-        id: 'thread-123',
-        title: 'test title',
-        body: 'test body',
-        owner: 'user-123',
-        date: '2023-09-25T11:52:48.150Z',
-      });
-      await CommentTableTestHelper.addComment({
-        id: 'comment-123',
-        threadId: 'thread-123',
-        content: 'test content',
-        owner: 'user-123',
-        date: '2023-09-25T11:52:48.150Z',
-      });
+      await UsersTableTestHelper.addUser({ id: 'user-123', username: 'dicoding' });
+      await ThreadsTableTestHelper.addThread({ id: 'thread-123', owner: 'user-123' });
+      await CommentTableTestHelper.addComment({ id: 'comment-123', threadId: 'thread-123', owner: 'user-123' });
+
       const server = await createServer(container);
 
       const response = await server.inject({
@@ -294,20 +257,8 @@ describe('/comments endpoint', () => {
 
       const accessToken = await ServerTestHelper.getAccessToken();
 
-      await ThreadsTableTestHelper.addThread({
-        id: 'thread-123',
-        title: 'test title',
-        body: 'test body',
-        owner: 'user-123',
-        date: '2023-09-25T11:52:48.150Z',
-      });
-      await CommentTableTestHelper.addComment({
-        id: 'comment-123',
-        threadId: 'thread-123',
-        content: 'test content',
-        owner: 'user-123',
-        date: '2023-09-25T11:52:48.150Z',
-      });
+      await ThreadsTableTestHelper.addThread({ id: 'thread-123', owner: 'user-123' });
+      await CommentTableTestHelper.addComment({ id: 'comment-123', threadId: 'thread-123', owner: 'user-123' });
 
       const server = await createServer(container);
 
