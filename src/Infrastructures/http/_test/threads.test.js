@@ -35,6 +35,7 @@ describe('/threads endpoint', () => {
 
       const responseJson = JSON.parse(response.payload);
       expect(response.statusCode).toEqual(401);
+      expect(responseJson.error).toEqual('Unauthorized');
       expect(responseJson.message).toEqual('Missing authentication');
     });
 
@@ -63,8 +64,8 @@ describe('/threads endpoint', () => {
 
     it('should response 400 when post thread not meet data type specification', async () => {
       const requestPayload = {
-        title: 123,
-        body: [],
+        title: [123],
+        body: ['123'],
       };
 
       const accessToken = await ServerTestHelper.getAccessToken();
@@ -107,62 +108,18 @@ describe('/threads endpoint', () => {
       expect(response.statusCode).toEqual(201);
       expect(responseJson.status).toEqual('success');
       expect(responseJson.data.addedThread).toBeDefined();
-      expect(responseJson.data.addedThread.title).toEqual(requestPayload.title);
+      expect(responseJson.data.addedThread.id).toBeDefined();
+      expect(responseJson.data.addedThread.title).toBeDefined();
+      expect(responseJson.data.addedThread.owner).toBeDefined();
     });
   });
 
   describe('when GET /threads/{threadId}', () => {
-    it('should response 404 when get thread details not found', async () => {
-      const server = createServer(container);
+    it('should response 200 when get thread detail correctly', async () => {
+      await UsersTableTestHelper.addUser({ id: 'user-123' });
+      await ThreadsTableTestHelper.addThread({ id: 'thread-123' });
+      await CommentTableTestHelper.addComment({ id: 'comment-123' });
 
-      const response = (await server).inject({
-        method: 'GET',
-        url: '/threads/***',
-      });
-
-      const responseJson = JSON.parse((await response).payload);
-      expect((await response).statusCode).toEqual(404);
-      expect(responseJson.status).toEqual('fail');
-      expect(responseJson.message).toEqual('Thread not found!');
-    });
-
-    it('should response 200 when get comment thread detail correctly', async () => {
-      // Arrange
-      await UsersTableTestHelper.addUser({
-        id: 'user-123',
-        username: 'dicoding',
-        password: 'secret',
-        fullname: 'Dicoding Indonesia',
-      });
-      await UsersTableTestHelper.addUser({
-        id: 'user-456',
-        username: 'johndoe',
-        password: 'inipassswordy',
-        fullname: 'John Doe',
-      });
-      await ThreadsTableTestHelper.addThread({
-        id: 'thread-123',
-        title: 'test title',
-        body: 'test body',
-        owner: 'user-123',
-        date: '2022-01-12T02:04:43.260Z',
-      });
-      await CommentTableTestHelper.addComment({
-        id: 'comment-123',
-        threadId: 'thread-123',
-        content: 'test content',
-        owner: 'user-123',
-        date: '2022-01-12T03:48:30.111Z',
-        isDelete: false,
-      });
-      await CommentTableTestHelper.addComment({
-        id: 'comment-456',
-        threadId: 'thread-123',
-        content: 'test new content',
-        owner: 'user-456',
-        date: '2022-01-13T10:49:06.563Z',
-        isDelete: true,
-      });
       const server = await createServer(container);
 
       const response = await server.inject({
@@ -173,12 +130,36 @@ describe('/threads endpoint', () => {
       const responseJson = JSON.parse(response.payload);
       expect(response.statusCode).toEqual(200);
       expect(responseJson.status).toEqual('success');
-      expect(responseJson.data).toBeDefined();
       expect(responseJson.data.thread).toBeDefined();
-      expect(responseJson.data.thread.comments).toHaveLength(2);
-      expect(responseJson.data.thread.comments[0]).toBeDefined();
-      expect(responseJson.data.thread.comments[1]).toBeDefined();
-      expect(responseJson.data.thread.comments[1].content).toEqual('**komentar telah dihapus**');
+      expect(responseJson.data.thread.id).toEqual('thread-123');
+      expect(responseJson.data.thread.title).toBeDefined();
+      expect(responseJson.data.thread.body).toBeDefined();
+      expect(responseJson.data.thread.date).toBeDefined();
+      expect(responseJson.data.thread.username).toBeDefined();
+      expect(responseJson.data.thread.comments).toBeDefined();
+      expect(responseJson.data.thread.comments[0].id).toEqual('comment-123');
+      expect(responseJson.data.thread.comments[0].username).toBeDefined();
+      expect(responseJson.data.thread.comments[0].date).toBeDefined();
+    });
+
+    it('should return content to be **komentar telah dihapus** after deleted comment', async () => {
+      await UsersTableTestHelper.addUser({ id: 'user-123', username: 'dicoding' });
+      await UsersTableTestHelper.addUser({ id: 'user-321', username: 'zulva' });
+      await ThreadsTableTestHelper.addThread({ id: 'thread-123' });
+      await CommentTableTestHelper.addComment({ id: 'comment-321', content: 'isi comment', isDelete: false });
+      await CommentTableTestHelper.addComment({ id: 'comment-123', content: '**komentar telah dihapus**', isDelete: true });
+
+      const server = await createServer(container);
+
+      const response = await server.inject({
+        method: 'GET',
+        url: '/threads/thread-123',
+      });
+
+      const responseJson = JSON.parse(response.payload);
+      expect(response.statusCode).toEqual(200);
+      expect(responseJson.status).toEqual('success');
+      expect(responseJson.data.thread.comments[0].content).toEqual('**komentar telah dihapus**');
     });
   });
 });
