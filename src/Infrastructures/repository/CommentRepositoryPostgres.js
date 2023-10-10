@@ -36,7 +36,7 @@ class CommentRepositoryPostgres extends CommentRepository {
     const result = await this._pool.query(query);
 
     if (!result.rows.length) {
-      throw new AuthorizationError('You are not authorized to access');
+      throw new AuthorizationError('Gagal! Anda tidak memiliki akses');
     }
   }
 
@@ -49,7 +49,7 @@ class CommentRepositoryPostgres extends CommentRepository {
     const result = await this._pool.query(query);
 
     if (!result.rowCount) {
-      throw new NotFoundError('Comments not found!');
+      throw new NotFoundError('Gagal! komen tidak ditemukan');
     }
 
     return commentId;
@@ -65,7 +65,7 @@ class CommentRepositoryPostgres extends CommentRepository {
     const result = await this._pool.query(query);
 
     if (!result.rowCount) {
-      throw new NotFoundError('Comments not found!');
+      throw new NotFoundError('Gagal! Komen tidak ditemukan');
     }
 
     return result.rows.map(
@@ -86,11 +86,7 @@ class CommentRepositoryPostgres extends CommentRepository {
       values: [commentId],
     };
 
-    const result = await this._pool.query(query);
-
-    if (!result.rowCount) {
-      throw new NotFoundError('Comment not found!');
-    }
+    await this._pool.query(query);
   }
 }
 

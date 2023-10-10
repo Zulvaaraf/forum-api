@@ -37,7 +37,7 @@ describe('/comments endpoint', () => {
       const responseJson = JSON.parse(response.payload);
       expect(response.statusCode).toEqual(404);
       expect(responseJson.status).toEqual('fail');
-      expect(responseJson.message).toEqual('Thread not found!');
+      expect(responseJson.message).toEqual('Gagal! Thread tidak ditemukan');
     });
 
     it('should response 401 when you are not autorized', async () => {
@@ -173,7 +173,7 @@ describe('/comments endpoint', () => {
       const responseJson = JSON.parse(response.payload);
       expect(response.statusCode).toEqual(404);
       expect(responseJson.status).toEqual('fail');
-      expect(responseJson.message).toEqual('Thread not found!');
+      expect(responseJson.message).toEqual('Gagal! Thread tidak ditemukan');
     });
 
     it('should response 404 when comment not found', async () => {
@@ -203,7 +203,7 @@ describe('/comments endpoint', () => {
       const responseJson = JSON.parse(response.payload);
       expect(response.statusCode).toEqual(404);
       expect(responseJson.status).toEqual('fail');
-      expect(responseJson.message).toEqual('Comments not found!');
+      expect(responseJson.message).toEqual('Gagal! komen tidak ditemukan');
     });
 
     it('should response 403 when deleting non-belonging comments ', async () => {
@@ -246,7 +246,7 @@ describe('/comments endpoint', () => {
       const responseJson = JSON.parse(response.payload);
       expect(response.statusCode).toEqual(403);
       expect(responseJson.status).toEqual('fail');
-      expect(responseJson.message).toEqual('You are not authorized to access');
+      expect(responseJson.message).toEqual('Gagal! Anda tidak memiliki akses');
     });
 
     it('should response 401 when request did not have accesToken', async () => {
